@@ -1,0 +1,22 @@
+# Publication control file.
+#   - "[Category]" starts a subsection (rendered as a red \cvsubsectionawesome
+#     title plus its own numbered list, numbering restarts per category).
+#   - Each following line is a BibTeX citekey from publications.bib.
+#   - Output order == the order listed here.
+#   - Lines starting with "#" are comments / placeholders.
+
+[Journals]
+hu2024active
+hu2023elm
+zhang2025boosting
+whu2025robust
+whu2025exceptional
+
+# [Conference]
+# <citekey>
+
+# [Preprint]
+# <citekey>
+
+# [Patent]
+# <citekey>

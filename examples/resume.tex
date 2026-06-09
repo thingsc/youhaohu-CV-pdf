@@ -30,13 +30,14 @@
 % Uncomment if you would like to specify your own color
 % \definecolor{awesome}{HTML}{3E6D9C}
 
-% Colors for text
-% Uncomment if you would like to specify your own color
-% \definecolor{darktext}{HTML}{414141}
-% \definecolor{text}{HTML}{333333}
-% \definecolor{graytext}{HTML}{5D5D5D}
-% \definecolor{lighttext}{HTML}{999999}
-% \definecolor{sectiondivider}{HTML}{5D5D5D}
+% Main text color (default pure black). Change the hex to recolor all body text.
+\setmaintextcolor{000000}
+% Body text weight for the lighter styles (paragraphs, descriptions, dates, ...).
+% Options: light (default) | regular | medium
+\setbodyweight{light}
+% Advanced: override individual colors instead, e.g.
+% \colorlet{lighttext}{gray}
+% \colorlet{sectiondivider}{gray}
 
 % Set false if you don't want to highlight section with awesome color
 \setbool{acvSectionColorHighlight}{true}
@@ -51,17 +52,17 @@
 %-------------------------------------------------------------------------------
 % Available options: circle|rectangle,edge/noedge,left/right
 % \photo[rectangle,edge,right]{./examples/profile}
-\name{Byungjin}{Park}
-\position{DevOps Engineer{\enskip\cdotp\enskip}Software Architect}
-\address{Mapo-gu, Seoul, Republic of Korea}
+\name{Youhao}{Hu}
+% \position{DevOps Engineer{\enskip\cdotp\enskip}Software Architect}
+\address{1st Duxue Road, Dongchong Town, Guangzhou, China}
 
-\mobile{(+82) 10-9030-1843}
+\mobile{(+86) 18255189791}
 %\whatsapp{(+82) 10-9030-1843}
-\email{posquit0.bj@gmail.com}
+\email{yhu543@connect.hkust-gz.edu.cn}
 %\dateofbirth{January 1st, 1970}
-\homepage{www.posquit0.com}
-\github{posquit0}
-\linkedin{posquit0}
+\homepage{https://thingsc.github.io/youhaohu-HKUST-CV/}
+% \github{posquit0}
+% \linkedin{posquit0}
 % \gitlab{gitlab-id}
 % \stackoverflow{SO-id}{SO-name}
 % \twitter{@twit}
@@ -77,8 +78,8 @@
 % \googlescholar{googlescholar-id}{}
 % \extrainfo{extra information}
 
-\quote{``Be the change that you want to see in the world."}
-
+% \quote{``Be the change that you want to see in the world."}
+\usepackage{makecell}
 
 %-------------------------------------------------------------------------------
 \begin{document}
@@ -91,7 +92,7 @@
 % Leave any of these blank if they are not needed
 \makecvfooter
   {\today}
-  {Byungjin Park~~~·~~~Résumé}
+  {Youhao Hu~~~·~~~Résumé}
   {\thepage}
 
 
@@ -100,13 +101,22 @@
 %	Each section is imported separately, open each file in turn to modify content
 %-------------------------------------------------------------------------------
 \input{resume/summary.tex}
-\input{resume/experience.tex}
+\input{resume/expertise.tex}
+\input{resume/education.tex}
+% \input{resume/experience.tex}
+\input{resume/publications.tex}
 \input{resume/honors.tex}
-\input{resume/certificates.tex}
+\input{resume/project.tex}
+\input{resume/poster1.tex}
+\input{resume/poster2.tex}
+\input{resume/poster3.tex}
+\input{resume/poster4_1.tex}
+\input{resume/poster4_2.tex}
+
+% \input{resume/certificates.tex}
 % \input{resume/presentation.tex}
 % \input{resume/writing.tex}
 % \input{resume/committees.tex}
-\input{resume/education.tex}
 % \input{resume/extracurricular.tex}
 
 

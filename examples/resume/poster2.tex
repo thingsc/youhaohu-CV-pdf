@@ -1,0 +1,20 @@
+%-------------------------------------------------------------------------------
+%	POSTER PAGE
+%	Header is required and editable; title / subtitle / abstract / figure are all
+%	optional -- delete any line you don't need to leave it blank.
+%	Add \newpage before this block if you want the poster on its own page.
+%-------------------------------------------------------------------------------
+\newpage
+\begin{cvposter}{Research Topic: Power Electronics}
+\vfill
+  \postertitle{ELM-Based Adaptive Practical Fixed-Time Voltage Regulation in Wireless Power Transfer System}
+
+  \postersubtitle{Published in \textit{Energies}}
+
+  \posterabstract{This paper proposes an extreme learning machine (ELM)-based adaptive sliding mode control strategy for the receiver-side buck converter system in the wireless power transfer system subjecting to the lumped uncertainty. The proposed control strategy utilizes a singularity-free fixed-time sliding mode (FTSM) feedback control, which ensures a fixed-time convergence for both the sliding variable and voltage tracking error. An ELM-based uncertainty bound estimator is further designed to learn the uncertainty bound information in real-time, which opportunely loosens the constraint of bound information requirement for sliding mode control design. The global stability of the closed-loop system is rigidly analyzed, and the good performance of the proposed control strategy is validated by comparison experiments which exhibit ideal overshoot elimination, 45.70-51.72\% reduction of settling time, and 13.65-36.96\% reduction of the root mean square value for voltage tracking error with respect to different load types.}
+
+  % Insert your externally generated poster (PDF or PNG) and uncomment:
+  \posterfigure{pic/poster2.png}
+  \posterdoi{\doi{10.3390/en16031016}}
+\vfill
+\end{cvposter}

@@ -96,6 +96,79 @@ docker run --rm --user $(id -u):$(id -g) -i -w "/doc" -v "$PWD":/doc texlive/tex
 In either case, this should result in the creation of ``{your-cv}.pdf``
 
 
+## Publications (citekey-driven)
+
+The résumé's **Publication** section is generated from BibTeX citekeys, so you
+maintain your papers as bibliography data instead of hand-writing LaTeX. A small
+generator turns selected citekeys into the rendered list (numbered entries with
+a bold title, an author line that highlights your own name, a short DOI link, and
+the journal name on the right).
+
+#### Files
+
+| File | Role |
+|---|---|
+| `examples/resume/publications.bib` | Your papers as BibTeX entries (one citekey each). The source of truth. |
+| `examples/resume/publications.keys` | Control file: which citekeys to show, their order, and their grouping. |
+| `scripts/gen_publications.py` | Generator (pure Python, no dependencies). |
+| `examples/resume/publications.tex` | **Auto-generated** output — do **not** edit by hand. |
+
+The rendering macros (`\cvpub`, `\cvpubs`, `\cvpubme`, `\cvsubsectionawesome`)
+live in `awesome-cv.cls`.
+
+#### Adding / editing a publication
+
+1. Add the paper to `publications.bib` as an `@article` with a unique citekey,
+   e.g.:
+
+   ```bibtex
+   @article{hu2024active,
+     title   = {An Active-Rectifier Wireless Motor System ...},
+     author  = {Hu, Youhao and Han, Wei and Zhang, Bowang},
+     journal = {IEEE Transactions on Power Electronics},
+     year    = {2024},
+     doi     = {10.1109/TPEL.2024.3493093}
+   }
+   ```
+   `title`, `author`, `journal` and `doi` are required; `year` is optional and,
+   when present, is shown on the right under the journal name. Write the `title`
+   as plain LaTeX (e.g. `1\textsuperscript{st}` for superscripts); do **not**
+   wrap words in protective braces like `{ELM}`.
+
+2. List its citekey in `publications.keys` under the category you want. A
+   `[Category]` line starts a red subsection with its own numbering (restarts at
+   1 per category); lines beginning with `#` are comments/placeholders:
+
+   ```
+   [Journals]
+   hu2024active
+   hu2023elm
+
+   # [Conference]
+   # <citekey>
+   ```
+   **The order in this file is the order shown.**
+
+3. Rebuild:
+
+   ```bash
+   make resume.pdf     # regenerates publications.tex (if bib/keys changed) then compiles
+   # or just regenerate without compiling:
+   make publications
+   ```
+
+#### Customizing
+
+- **Highlighted name** — edit `MY_NAME` near the top of
+  `scripts/gen_publications.py` (accepts `"First Last"` and `"Last, First"`
+  forms). Matching authors are wrapped in `\cvpubme{}` (bold + accent color).
+- **Author separators** — authors are joined with commas and `" and "` before
+  the last; change `format_authors()` in the script to adjust.
+- **DOI / number / colors** — tweak the `\cvpub` macro in `awesome-cv.cls`.
+- A missing citekey (or an entry missing a required field) is skipped with a
+  warning and does not abort the build.
+
+
 ## Credit
 
 [**LaTeX**](https://www.latex-project.org) is a fantastic typesetting program that a lot of people use these days, especially the math and computer science people in academia.

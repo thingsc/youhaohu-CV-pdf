@@ -1,0 +1,20 @@
+%-------------------------------------------------------------------------------
+%	POSTER PAGE
+%	Header is required and editable; title / subtitle / abstract / figure are all
+%	optional -- delete any line you don't need to leave it blank.
+%	Add \newpage before this block if you want the poster on its own page.
+%-------------------------------------------------------------------------------
+\newpage
+\begin{cvposter}{Research Topic: Power Electronics}
+  \vfill
+  \postertitle{An Active-Rectifier Wireless Motor System with Dual-Side Phase Shift Control for Phase Synchronization and Efficiency Optimization}
+
+  \postersubtitle{Published in \textit{IEEE Transactions on Power Electronics}}
+
+  \posterabstract{This paper introduces a novel active-rectifier wireless motor (AR-WM) system with dual-side phase shift control (DS-PSC) to not only synchronize dual-side phases eliminating reactive power but also maximize the system efficiency. First, by detecting the zero-crossing point of the secondary resonant current, the phase angle between two converters on both sides is locked at 90 degree to maintain the real-time frequency synchronization. Second, the primary-side PSC determines the load voltage for regulating the motor speed, while the secondary-side PSC is responsible for achieving dual-side zero phase angle by synchronizing dual-side phases and tracking the maximum efficiency point by rapidly tuning the equivalent impedance. Besides, to improve the dynamic performance of the AR-WM system, an integral finite-time control approach is utilized, resulting in a 43.89\% reduction in speed response time compared to the traditional PI control method. Finally, a 180 W experimental prototype is built with a maximum system efficiency of 92.37\% at a transfer distance of 10 cm.}
+
+  % Insert your externally generated poster (PDF or PNG) and uncomment:
+  \posterfigure{pic/poster1.png}
+  \posterdoi{\doi{10.1109/TPEL.2024.3493093}}
+  \vfill
+\end{cvposter}

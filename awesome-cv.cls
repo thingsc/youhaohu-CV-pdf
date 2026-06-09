@@ -96,6 +96,8 @@
   BoldItalicFont=* Bold Italic,
   FontFace={l}{n}{Font=* Light},
   FontFace={l}{it}{Font=* Light Italic},
+  FontFace={mb}{n}{Font=* Medium},
+  FontFace={mb}{it}{Font=* Medium Italic},
 ]
 \newfontfamily\roboto{Roboto}[
   UprightFont=*,
@@ -117,6 +119,8 @@
   pdfsubject={},
   pdfkeywords={}
 }
+% Underlined, awesome-colored hyperlink for body text (matches DOI style in \cvpub)
+\newcommand*{\cvhref}[2]{\href{#1}{\textcolor{awesome}{\underline{#2}}}}
 % Solves issues Warning: File `cv.out' has changed
 \RequirePackage{bookmark}
 
@@ -161,11 +165,17 @@
 \definecolor{red}{HTML}{FB4485}
 \definecolor{blue}{HTML}{6CE0F1}
 % Text colors
-\definecolor{darktext}{HTML}{414141}
-\colorlet{text}{darkgray}
-\colorlet{graytext}{gray}
-\colorlet{lighttext}{lightgray}
-\colorlet{sectiondivider}{gray}
+% Single knob driving all grayscale text colors. Override in your .tex
+% preamble, e.g. \setmaintextcolor{1A1A1A}. Default is pure black.
+\newcommand{\setmaintextcolor}[1]{%
+  \definecolor{maintext}{HTML}{#1}%
+  \colorlet{text}{maintext}%
+  \colorlet{darktext}{maintext}%
+  \colorlet{graytext}{maintext}%
+  \colorlet{lighttext}{maintext}%
+  \colorlet{sectiondivider}{maintext}%
+}
+\setmaintextcolor{000000}% default: pure black
 % Awesome colors
 \definecolor{awesome-emerald}{HTML}{00A388}
 \definecolor{awesome-skyblue}{HTML}{0395DE}
@@ -188,7 +198,16 @@
 \newcommand*{\headerfontlight}{\roboto\fontseries{l}\selectfont}
 \newcommand*{\footerfont}{\sffamily}
 \newcommand*{\bodyfont}{\sffamily}
-\newcommand*{\bodyfontlight}{\sffamily\fontseries{l}\selectfont}
+% Weight used by all "light" body styles (paragraphs, descriptions, dates, etc.).
+% Switch it with \setbodyweight{light|regular|medium} in your .tex preamble.
+\newcommand*{\bodyweightseries}{l}
+\newcommand*{\bodyfontlight}{\sffamily\fontseries{\bodyweightseries}\selectfont}
+\newcommand{\setbodyweight}[1]{%
+  \ifstrequal{#1}{light}{\renewcommand*{\bodyweightseries}{l}}{%
+  \ifstrequal{#1}{regular}{\renewcommand*{\bodyweightseries}{m}}{%
+  \ifstrequal{#1}{medium}{\renewcommand*{\bodyweightseries}{mb}}{%
+  \renewcommand*{\bodyweightseries}{#1}}}}% fallback: raw NFSS series code
+}
 
 %-------------------------------------------------------------------------------
 %                Configuration for styles
@@ -215,14 +234,14 @@
 
 % For elements of entry
 \newcommand*{\entrytitlestyle}[1]{{\fontsize{10pt}{1em}\bodyfont\bfseries\color{darktext} #1}}
-\newcommand*{\entrypositionstyle}[1]{{\fontsize{8pt}{1em}\bodyfont\scshape\color{graytext} #1}}
+\newcommand*{\entrypositionstyle}[1]{{\fontsize{8pt}{1em}\bodyfontlight\scshape\color{graytext} #1}}
 \newcommand*{\entrydatestyle}[1]{{\fontsize{8pt}{1em}\bodyfontlight\slshape\color{graytext} #1}}
 \newcommand*{\entrylocationstyle}[1]{{\fontsize{9pt}{1em}\bodyfontlight\slshape\color{awesome} #1}}
 \newcommand*{\descriptionstyle}[1]{{\fontsize{9pt}{1em}\bodyfontlight\upshape\color{text} #1}}
 
 % For elements of subentry
-\newcommand*{\subentrytitlestyle}[1]{{\fontsize{8pt}{1em}\bodyfont\mdseries\color{graytext} #1}}
-\newcommand*{\subentrypositionstyle}[1]{{\fontsize{7pt}{1em}\bodyfont\scshape\color{graytext} #1}}
+\newcommand*{\subentrytitlestyle}[1]{{\fontsize{8pt}{1em}\bodyfontlight\color{graytext} #1}}
+\newcommand*{\subentrypositionstyle}[1]{{\fontsize{7pt}{1em}\bodyfontlight\scshape\color{graytext} #1}}
 \newcommand*{\subentrydatestyle}[1]{{\fontsize{7pt}{1em}\bodyfontlight\slshape\color{graytext} #1}}
 \newcommand*{\subentrylocationstyle}[1]{{\fontsize{7pt}{1em}\bodyfontlight\slshape\color{awesome} #1}}
 \newcommand*{\subdescriptionstyle}[1]{{\fontsize{8pt}{1em}\bodyfontlight\upshape\color{text} #1}}
@@ -769,14 +788,12 @@
   \setlength{\extrarowheight}{0pt}
   \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
     \setlength\leftskip{0.2cm}
-    \subentrytitlestyle{#2} & \ifthenelse{\equal{#1}{}}
-      {\subentrydatestyle{#3}}{}
     \ifthenelse{\equal{#1}{}}
-      {}
-      {\subentrypositionstyle{#1} & \subentrydatestyle{#3} \\}
+      {\subentrytitlestyle{#2} & \subentrydatestyle{#3}}
+      {\subentrytitlestyle{#2} & \\ \subentrypositionstyle{#1} & \subentrydatestyle{#3}}
     \ifthenelse{\equal{#4}{}}
       {}
-      {\multicolumn{2}{L{17.0cm}}{\subdescriptionstyle{#4}} \\}
+      {\\ \multicolumn{2}{L{17.0cm}}{\subdescriptionstyle{#4}}}
   \end{tabular*}
 }
 
@@ -796,6 +813,97 @@
 % Usage: \cvhonor{<position>}{<title>}{<location>}{<date>}
 \newcommand*{\cvhonor}[4]{%
   \honordatestyle{#4} & \honorpositionstyle{#1}\ifempty{#2}{}{,} \honortitlestyle{#2} & \honorlocationstyle{#3} \\
+}
+
+% Top-aligned paragraph column types (used by multi-line publication entries)
+\newcolumntype{P}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{Q}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+
+% Awesome-colored subsection title (publication only; keeps \cvsubsection unchanged)
+\newcommand*{\subsectionstyleawesome}[1]{{\fontsize{12pt}{1em}\bodyfont\scshape\textcolor{awesome}{#1}}}
+\newcommand{\cvsubsectionawesome}[1]{%
+  \vspace{\acvSectionContentTopSkip}
+  \vspace{-3mm}
+  \subsectionstyleawesome{#1}
+  \phantomsection
+}
+
+% Highlight the author's own name within an author list
+\newcommand*{\cvpubme}[1]{{\bfseries\color{awesome}#1}}
+
+% Define an environment for a publication list (numbering restarts each list)
+\newcounter{pubitem}
+\newenvironment{cvpubs}{%
+  \setcounter{pubitem}{0}
+  \vspace{\acvSectionContentTopSkip}
+  \vspace{-2mm}
+  \begin{center}
+}{%
+  \end{center}
+}
+% Define a publication entry
+% Usage: \cvpub{<title>}{<authors>}{<bare-doi>}{<journal>}{<year>}
+\newcommand*{\cvpub}[5]{%
+  \refstepcounter{pubitem}%
+  \setlength\tabcolsep{0pt}
+  \setlength{\extrarowheight}{0pt}
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} P{0.6cm} P{\textwidth - 5.3cm} Q{4.0cm}}
+    \entrytitlestyle{\thepubitem} &
+    \entrytitlestyle{#1}\newline
+      \entrypositionstyle{#2}\newline
+      {\fontsize{8pt}{1em}\bodyfontlight\color{graytext}(\textsc{doi:}~\href{https://doi.org/#3}{\textcolor{awesome}{\underline{#3}}})} &
+    \entrylocationstyle{#4}\ifstrempty{#5}{}{\newline\entrylocationstyle{#5}} \\
+  \end{tabular*}%
+  \vspace{2.0mm}%
+}
+
+% Define an environment for an area-of-expertise list
+\newenvironment{cvexpertises}{%
+  \vspace{\acvSectionContentTopSkip}
+  \vspace{-3mm}
+}{%
+  \par
+  \vspace{-2mm}
+}
+% Define an area-of-expertise entry (bold heading + descriptive paragraph)
+% Usage: \begin{cvexpertise}{<title>} <description> \end{cvexpertise}
+% Add \vspace{...} between entries to widen the gap as desired.
+\newenvironment{cvexpertise}[1]{%
+  \setlength{\parskip}{0pt}%
+  \skilltypestyle{#1}\par\vspace{0.7mm}
+  \paragraphstyle
+}{%
+  \par\vspace{1.6mm}%
+}
+
+% Poster / publication-highlight page
+% Needed to include an externally generated poster (PDF/PNG)
+\RequirePackage{graphicx}
+\newcommand*{\postertitlestyle}[1]{{\fontsize{17pt}{1.15em}\bodyfont\bfseries\color{darktext} #1}}
+\newcommand*{\postersubtitlestyle}[1]{{\fontsize{11pt}{1em}\bodyfont\upshape\color{text} #1}}
+% Optional building blocks (omit any to leave it blank)
+\newcommand{\postertitle}[1]{{\centering\postertitlestyle{#1}\par}\vspace{1.0mm}}
+\newcommand{\postersubtitle}[1]{{\centering\postersubtitlestyle{#1}\par}\vspace{2.0mm}}
+\newcommand{\posterabstract}[1]{{\paragraphstyle #1\par}\vspace{2.5mm}}
+% Leading \par closes any preceding paragraph (e.g. a \posterdoi line) BEFORE the
+% \centering group opens, so the figure's centering can never leak backwards.
+\newcommand{\posterfigure}[2][\linewidth]{\par{\centering\includegraphics[width=#1]{#2}\par}}
+% \doi{<key>}: a linked "DOI: <key>" -- the URL is written once, so the link
+% target and the displayed text can never disagree (no copy/paste typo).
+\newcommand{\doi}[1]{DOI: \cvhref{https://doi.org/#1}{#1}}
+% \posterdoi{<content>}: right-aligned DOI line(s) under a poster figure; stack
+% multiple with \\. Self-contained \par + \raggedleft makes it immune to the
+% \centering of a following \posterfigure. Do NOT use a bare \hfill...\\ here --
+% its last line is governed by \parfillskip and will not flush right.
+\newcommand{\posterdoi}[1]{{\par\raggedleft\small\itshape #1\par}}
+% Poster page: header (required, editable) via \cvsection; does not force a page break
+% Usage: \begin{cvposter}{<header>} <optional building blocks> \end{cvposter}
+\newenvironment{cvposter}[1]{%
+  \cvsection{#1}
+  \vspace{\acvSectionContentTopSkip}
+  \vspace{-1mm}
+}{%
+  \par
 }
 
 % Define an environment for cvskill
